@@ -53,7 +53,7 @@ A modern collaborative notes and file sharing application built with React Nativ
 ```txt
 app/
  ├── (auth)
- ├── (tabs)
+ ├── screens
  ├── group
 
 components/
