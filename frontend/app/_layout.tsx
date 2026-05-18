@@ -6,42 +6,42 @@ import { ActivityIndicator, StatusBar, View } from "react-native";
 import "../api/interceptors";
 
 function RootLayout() {
-  const mode = useThemeStore((s) => s.theme);
-  const barStyle = mode === "dark" ? "light-content" : "dark-content";
+    const mode = useThemeStore((s) => s.theme);
+    const barStyle = mode === "dark" ? "light-content" : "dark-content";
 
-  const { user, isLoading, loadUser } = useAuth();
+    const { user, isLoading, loadUser } = useAuth();
 
-  useEffect(() => {
-    loadUser();
-  }, []);
+    useEffect(() => {
+        loadUser();
+    }, []);
 
-  if (isLoading) {
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <ActivityIndicator color={"#000"} />
+            </View>
+        );
+    }
+
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator color={"#000"} />
-      </View>
+        <>
+            <StatusBar backgroundColor="#fff" barStyle={barStyle} />
+            <Stack
+                screenOptions={{
+                    headerShown: false,
+                }}
+            >
+                <Stack.Protected guard={!user}>
+                    <Stack.Screen name="(auth)" />
+                </Stack.Protected>
+                <Stack.Protected guard={!!user}>
+                    <Stack.Screen name="screens" />
+                </Stack.Protected>
+            </Stack>
+        </>
     );
-  }
-
-  return (
-    <>
-      <StatusBar backgroundColor="#fff" barStyle={barStyle} />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Protected guard={!user}>
-          <Stack.Screen name="(auth)" />
-        </Stack.Protected>
-        <Stack.Protected guard={!!user}>
-          <Stack.Screen name="(tabs)" />
-        </Stack.Protected>
-      </Stack>
-    </>
-  );
 }
 
 export default function InitialLayout() {
-  return <RootLayout />;
+    return <RootLayout />;
 }
